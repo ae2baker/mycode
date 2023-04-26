@@ -1,4 +1,4 @@
-luke_skywalker = {
+lukeskywalker = {
     "Title": ["Jedi Knight", "Jedi Master", "Red Five", "Rogue Leader"],
     "Occupation": ["Apprentice", "Moisture Farmer", "Pilot", "Jedi"],
     "Affiliation": ["Skywalker family", "Rebel Alliance", "Rogue Squadron", "Jedi", "New Republic", "New Jedi Order", "Resistance", "Galactic Alliance", "Jedi Council"],
@@ -7,4 +7,10 @@ luke_skywalker = {
     "Master": ["Obi-Wan Kenobi", "Yoda"],
     "Apprentice": ["Leia Organa", "New Jedi Order students", "Grogu", "Ben Solo", "Rey"]
 }
+
+name= lukeskywalker['Occupation']
+
+father= lukeskywalker[Family][1]
+
+favorite_apprentice= [Apprentice][-1]
 
