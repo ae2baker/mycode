@@ -1,0 +1,62 @@
+#!/usr/bin/env python3
+"""Lord of the Rings Character API | Chris Baker"""
+import requests
+from flask import Flask, redirect, url_for, render_template, request, jsonify
+
+# this object represents our website!
+app = Flask(__name__)
+
+TOKEN = "JrQhgSTZtzYays5Y9Lio"
+API_URL = "https://the-one-api.dev/v2"
+
+def get_lotr_character():
+    """Returns a random character from the Lord of the Rings API"""
+    headers = {"Authorization": f"Bearer {TOKEN}"}
+    response = requests.get(f"{API_URL}/character", headers=headers)
+    if response.status_code == 200:
+        data = response.json()
+        results = data["docs"]
+        return random.choice(results)
+    else:
+        return "Failed to retrieve a character from the API"
+
+@app.route("/choice")
+def landingpage():
+    return render_template("titleposter.html")
+
+@app.route("/bookchoice", methods=["POST"])
+def bookchoice():
+    if request.form["nm"]:
+        # if a value was posted, grab that value and put it in a variable
+        title = request.form["nm"]
+    else:
+        # if no value was posted, pick a random Lord of the Rings character
+        title = "Lord of the Rings"
+
+    # send the title to a separate function which will find and return a match (if one exists)
+    character = get_lotr_character()
+
+    return jsonify(character)
+
+@app.route("/<derpnum>")
+def redirectexample(derpnum):
+    """route for redirecting users who don't follow instructions-
+    it's /quotes/<num>, NOT /<num>"""
+    return redirect(url_for("randomquote", num=derpnum))
+
+@app.route("/quotes/<num>")
+def randomquote(num):
+    """returns a random selection of characters"""
+    characters = []
+
+    # repeats code according to number above; characters are added to the list
+    for everynum in range(int(num)):
+        character = get_lotr_character()
+        characters.append(character)
+
+    return jsonify(characters)
+
+if __name__ == "__main__":
+    # debug=True is really nice for testing; whenever you save the file
+    # the flask API automatically restarts
+    app.run(host="0.0.0.0", port=2224, debug=True)

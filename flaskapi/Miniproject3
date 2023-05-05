@@ -1,0 +1,31 @@
+#!/usr/bin/env python3
+"""Mini Project 3 | Flask API | Chris Baker"""
+
+from flask import Flask, render_template, jsonify, session
+import requests
+
+app = Flask(__name__)
+
+# Endpoint that returns JSON data from the Lord of the Rings API
+@app.route('/api/characters')
+def get_characters():
+    Headers = {'Authorization': 'Bearer JrQhgSTZtzYays5Y9Lio'}
+    response = requests.get('https://the-lord-of-the-rings-api.herokuapp.com/api/character')
+    data = response.json()
+    return jsonify(data)
+
+# Endpoint that returns HTML using Jinja2 templating and requires a session value
+@app.route('/characters')
+def show_characters():
+    if 'username' in session:
+        conn = sqlite3.connect('database.db')
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM characters")
+        characters = cursor.fetchall()
+        return render_template('characters.html', characters=characters)
+    else:
+        return "Session value required. Please log in."
+
+if __name__ == '__main__':
+    app.run (host="0.0.0.0", port=2224, debug=True)
+    
